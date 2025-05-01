@@ -14,7 +14,7 @@ interface Article {
 }
 
 async function fetchArticle(postId: string): Promise<Article> {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/articles/${postId}`, {
+  const res = await fetch(`/api/articles/${postId}`, {
     cache: "no-store",
   });
 

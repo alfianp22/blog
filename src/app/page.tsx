@@ -19,10 +19,10 @@ export default function HomePage() {
   useEffect(() => {
     async function fetchData() {
       try {
-        const featuredRes = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/articles/featured`, {
+        const featuredRes = await fetch(`/api/articles/featured`, { 
           cache: "no-store",
         });
-        const latestRes = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/articles`, {
+        const latestRes = await fetch(`/api/articles`, {
           cache: "no-store",
         });
 

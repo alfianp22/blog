@@ -18,7 +18,7 @@ export default function CategoriesPage() {
   useEffect(() => {
     async function fetchArticles() {
       try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/articles`, {
+        const res = await fetch(`/api/articles`, {
           cache: "no-store",
         });
 
