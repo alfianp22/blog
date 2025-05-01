@@ -1,8 +1,9 @@
 import Image from "next/image";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
-import type { HTMLAttributes } from "react";
-import type { Components } from "react-markdown";
+import { HTMLAttributes } from "react";
+
+/* eslint-disable @typescript-eslint/no-unused-vars */
 
 interface Article {
   objectId: string;
@@ -13,12 +14,9 @@ interface Article {
 }
 
 async function fetchArticle(postId: string): Promise<Article> {
-  const res = await fetch(
-    `${process.env.NEXT_PUBLIC_BASE_URL}/api/articles/${postId}`,
-    {
-      cache: "no-store",
-    }
-  );
+  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/articles/${postId}`, {
+    cache: "no-store",
+  });
 
   if (!res.ok) {
     throw new Error("Failed to fetch article");
@@ -27,92 +25,17 @@ async function fetchArticle(postId: string): Promise<Article> {
   return res.json();
 }
 
-const markdownComponents: Components = {
-  p: ({ node, ...props }) => (
-    <p className="text-white mb-4 leading-relaxed" {...props} />
-  ),
-  h1: ({ node, ...props }) => (
-    <h1 className="text-3xl font-bold mt-8 mb-4 text-white" {...props} />
-  ),
-  h2: ({ node, ...props }) => (
-    <h2 className="text-2xl font-semibold mt-6 mb-4 text-gray-800" {...props} />
-  ),
-  h3: ({ node, ...props }) => (
-    <h3 className="text-xl font-semibold mt-4 mb-2 text-gray-700" {...props} />
-  ),
-  ul: ({ node, ...props }) => (
-    <ul
-      className="list-disc list-inside space-y-2 ml-4 text-gray-700"
-      {...props}
-    />
-  ),
-  ol: ({ node, ...props }) => (
-    <ol
-      className="list-decimal list-inside space-y-2 ml-4 text-gray-700"
-      {...props}
-    />
-  ),
-  blockquote: ({ node, ...props }) => (
-    <blockquote
-      className="border-l-4 border-blue-500 pl-4 italic text-gray-600 my-4"
-      {...props}
-    />
-  ),
-  strong: ({ node, ...props }) => (
-    <strong className="font-bold text-white" {...props} />
-  ),
-  code: ({
-    inline,
-    className,
-    children,
-    ...props
-  }: HTMLAttributes<HTMLElement> & { inline?: boolean }) => {
-    return inline ? (
-      <code
-        className="bg-gray-100 rounded px-1 text-sm text-pink-600"
-        {...props}
-      >
-        {children}
-      </code>
-    ) : (
-      <pre className="bg-gray-800 text-gray-100 p-4 rounded my-4 overflow-x-auto">
-        <code className={className} {...props}>
-          {children}
-        </code>
-      </pre>
-    );
-  },
-  img: ({ node, ...props }) => (
-    <img
-      className="rounded-lg my-4 mx-auto max-h-96 object-contain"
-      {...props}
-      alt=""
-    />
-  ),
-  table: ({ node, ...props }) => (
-    <table
-      className="w-full table-auto border-collapse border border-gray-300 my-6 text-sm"
-      {...props}
-    />
-  ),
-  th: ({ node, ...props }) => (
-    <th
-      className="border border-gray-300 bg-gray-100 p-2 font-bold"
-      {...props}
-    />
-  ),
-  td: ({ node, ...props }) => (
-    <td className="border border-gray-300 p-2" {...props} />
-  ),
-};
-
-export default async function PostPage({
-  params,
-}: {
-  params: { postId: string };
-}) {
+// ✅ Perbaiki: params tidak boleh Promise
+export default async function PostPage({ params }: { params: { postId: string } }) {
   const { postId } = params;
   const article = await fetchArticle(postId);
+
+  // ✅ Tambahkan typing khusus untuk komponen <code>
+  type CodeProps = {
+    inline?: boolean;
+    className?: string;
+    children?: React.ReactNode;
+  } & HTMLAttributes<HTMLElement>;
 
   return (
     <>
@@ -147,7 +70,57 @@ export default async function PostPage({
         )}
         <ReactMarkdown
           remarkPlugins={[remarkGfm]}
-          components={markdownComponents}
+          components={{
+            p: ({ node, ...props }) => (
+              <p className="text-white mb-4 leading-relaxed" {...props} />
+            ),
+            h1: ({ node, ...props }) => (
+              <h1 className="text-3xl font-bold mt-8 mb-4 text-white" {...props} />
+            ),
+            h2: ({ node, ...props }) => (
+              <h2 className="text-2xl font-semibold mt-6 mb-4 text-gray-800" {...props} />
+            ),
+            h3: ({ node, ...props }) => (
+              <h3 className="text-xl font-semibold mt-4 mb-2 text-gray-700" {...props} />
+            ),
+            ul: ({ node, ...props }) => (
+              <ul className="list-disc list-inside space-y-2 ml-4 text-gray-700" {...props} />
+            ),
+            ol: ({ node, ...props }) => (
+              <ol className="list-decimal list-inside space-y-2 ml-4 text-gray-700" {...props} />
+            ),
+            blockquote: ({ node, ...props }) => (
+              <blockquote className="border-l-4 border-blue-500 pl-4 italic text-gray-600 my-4" {...props} />
+            ),
+            strong: ({ node, ...props }) => (
+              <strong className="font-bold text-white" {...props} />
+            ),
+            code: ({ inline, className, children, ...props }: CodeProps) => {
+              return inline ? (
+                <code className="bg-gray-100 rounded px-1 text-sm text-pink-600" {...props}>
+                  {children}
+                </code>
+              ) : (
+                <pre className="bg-gray-800 text-gray-100 p-4 rounded my-4 overflow-x-auto">
+                  <code className={className} {...props}>
+                    {children}
+                  </code>
+                </pre>
+              );
+            },
+            img: ({ node, ...props }) => (
+              <img className="rounded-lg my-4 mx-auto max-h-96 object-contain" {...props} alt="" />
+            ),
+            table: ({ node, ...props }) => (
+              <table className="w-full table-auto border-collapse border border-gray-300 my-6 text-sm" {...props} />
+            ),
+            th: ({ node, ...props }) => (
+              <th className="border border-gray-300 bg-gray-100 p-2 font-bold" {...props} />
+            ),
+            td: ({ node, ...props }) => (
+              <td className="border border-gray-300 p-2" {...props} />
+            ),
+          }}
         >
           {article.content}
         </ReactMarkdown>

@@ -18,12 +18,9 @@ export default function CategoriesPage() {
   useEffect(() => {
     async function fetchArticles() {
       try {
-        const res = await fetch(
-          `${process.env.NEXT_PUBLIC_BASE_URL}/api/articles`,
-          {
-            cache: "no-store",
-          }
-        );
+        const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/articles`, {
+          cache: "no-store",
+        });
 
         if (!res.ok) {
           throw new Error("Failed to fetch articles for Categories Page");
@@ -61,19 +58,19 @@ export default function CategoriesPage() {
         </div>
       </section>
 
-      {/* Categories Section (Centered and Clean) */}
-      <section className="max-w-4xl mx-auto px-4 py-8">
-        <h2 className="text-3xl font-bold mb-8 text-center text-white">
-          Explore Categories
+      {/* Categories Grid */}
+      <section className="max-w-6xl mx-auto px-4 py-8">
+        <h2 className="text-2xl font-bold mb-8 text-center text-gray-800">
+          Browse by Categories
         </h2>
 
-        <div className="flex flex-wrap justify-center gap-6 mb-16">
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-8 mb-16">
           {categories.map((cat, i) => (
             <div
               key={i}
-              className="w-40 bg-gradient-to-br from-blue-50 via-white to-blue-50 p-6 rounded-xl shadow-md text-center group hover:shadow-lg transition-all duration-300 cursor-pointer"
+              className="relative bg-gradient-to-br from-blue-50 via-white to-blue-50 p-8 rounded-xl shadow-md text-center group hover:shadow-lg transition-all duration-300 cursor-pointer"
             >
-              <div className="flex items-center justify-center mb-3">
+              <div className="flex items-center justify-center mb-4">
                 <div className="bg-blue-100 text-blue-600 p-4 rounded-full">
                   <span className="text-2xl font-bold">{cat[0]}</span>
                 </div>
@@ -110,9 +107,7 @@ export default function CategoriesPage() {
                     Otomotif
                   </span>
                   <h3 className="text-lg font-bold mt-1">{article.title}</h3>
-                  <p className="text-gray-600 text-sm mt-2">
-                    {article.preview}
-                  </p>
+                  <p className="text-gray-600 text-sm mt-2">{article.preview}</p>
                   <Link
                     href={`/posts/${article.objectId}`}
                     className="mt-4 inline-block bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-2 px-4 rounded transition duration-300"

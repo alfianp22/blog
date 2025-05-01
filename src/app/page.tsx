@@ -19,18 +19,12 @@ export default function HomePage() {
   useEffect(() => {
     async function fetchData() {
       try {
-        const featuredRes = await fetch(
-          `${process.env.NEXT_PUBLIC_BASE_URL}/api/articles/featured`,
-          {
-            cache: "no-store",
-          }
-        );
-        const latestRes = await fetch(
-          `${process.env.NEXT_PUBLIC_BASE_URL}/api/articles`,
-          {
-            cache: "no-store",
-          }
-        );
+        const featuredRes = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/articles/featured`, {
+          cache: "no-store",
+        });
+        const latestRes = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/articles`, {
+          cache: "no-store",
+        });
 
         if (!featuredRes.ok || !latestRes.ok) {
           throw new Error("Failed to fetch articles");
@@ -82,9 +76,7 @@ export default function HomePage() {
       {/* Featured Post Section */}
       {featured && (
         <section className="max-w-6xl mx-auto px-4 py-16">
-          <h2 className="text-2xl font-semibold mb-6 text-white">
-            Featured Article
-          </h2>
+          <h2 className="text-2xl font-semibold mb-6">Featured Article</h2>
           <div className="bg-gray-100 p-6 rounded-lg shadow-md">
             {featured.image && (
               <Image
@@ -131,9 +123,7 @@ export default function HomePage() {
                     Otomotif
                   </span>
                   <h3 className="text-lg font-bold mt-1">{article.title}</h3>
-                  <p className="text-gray-600 text-sm mt-2">
-                    {article.preview}
-                  </p>
+                  <p className="text-gray-600 text-sm mt-2">{article.preview}</p>
                   <Link
                     href={`/posts/${article.objectId}`}
                     className="mt-4 inline-block bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-2 px-4 rounded transition duration-300"
