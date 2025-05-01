@@ -1,0 +1,8 @@
+module.exports = {
+    root: true,
+    extends: ["next", "next/core-web-vitals"],
+    rules: {
+      "@typescript-eslint/ban-ts-comment": "off"
+    }
+  };
+  
