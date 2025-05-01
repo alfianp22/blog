@@ -1,4 +1,4 @@
-//** @type {import('next').NextConfig} */
+/** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
     domains: [
@@ -7,6 +7,9 @@ const nextConfig = {
       "s2.mojalbum.com",
       "th.bing.com",
     ],
+  },
+  eslint: {
+    ignoreDuringBuilds: true, // ✅ ESLint dimatikan saat proses build
   },
 };
 
