@@ -14,7 +14,7 @@ interface Article {
 }
 
 async function fetchArticle(postId: string): Promise<Article> {
-  const res = await fetch(`/api/articles/${postId}`, {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/articles/${postId}`, {
     cache: "no-store",
   });
 
@@ -25,12 +25,10 @@ async function fetchArticle(postId: string): Promise<Article> {
   return res.json();
 }
 
-// ✅ Perbaiki: params tidak boleh Promise
 export default async function PostPage({ params }: { params: { postId: string } }) {
   const { postId } = params;
   const article = await fetchArticle(postId);
 
-  // ✅ Tambahkan typing khusus untuk komponen <code>
   type CodeProps = {
     inline?: boolean;
     className?: string;
